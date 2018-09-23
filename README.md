@@ -1,7 +1,31 @@
 # CarND-Controls-PID
 Self-Driving Car Engineer Nanodegree Program
 
----
+
+## Reflection
+The PID controller has 3 compoments: Proportional, Integral, Differential.
+* Proportional(P): The P component is the most important one. It is proportional to CTE Error(How far the vehicle is from  lane center), but in opposite direction. Therefore, P controller Steers the car in opposite direction to car's present direction with proportional amount to how far the car is from  lane center (CTE). This is done to make car move towards center of lane. It causes a issue with too hard steering to opposite direction and will eventually make the vehicle out of road.
+
+Impact  on project: Only tuning P value caused the car to move within the track for few cycles. But eventually the overshooting of I controller took vehicle off road.
+
+* Differential(D): D controller helps mitigate the problem of hard steering which leads to overshooting. It helps the car move towards center smoothly without overshooting.
+
+Impact  on project: D component added with P helped driving the vehicle within track for long enough for twiddle algo to run.
+
+* Integral(I): I controller is used to mitigate bias impact while driving(ex. steering drift), which may otherwise prevent the P-D controller  to reach the center.
+
+Impact on project: As I component is multiplied with integral value of CTE's till present(in opposite sign), a big value of I was causing vehicle to overshoot and not reaching lane center. I kept the value to 0 which gave me enough time to accumulate cte's for running twiddle  algorithm.
+
+## Final Hyperparameters:
+I have started step - by - step by finetuning each of the PID components sequentially adding them one after another. I stated with following values(P I D):
+a. 0.1 0 0
+b. 0.1 0 1
+
+This allowed me to run car within track for some time. It is needed for twiddle algorithm to accumulate some error values for calculating parameters. Finally i ran twiddle after 700 cycle followed by a reset. This continued for each hyperparameter and eventually i reached a stable value:
+(0.121 0.00021 1.2)
+
+This is how I optimized hyperparameters to reach value which drive the car smoothly within road.
+
 
 ## Dependencies
 
